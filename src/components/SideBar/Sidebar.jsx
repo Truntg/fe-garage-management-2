@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import {
   MenuFoldOutlined,
@@ -8,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 const { Header, Sider, Content } = Layout;
-const SildeBar = () => {
+const SideBar = ({ content }) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -66,11 +67,11 @@ const SildeBar = () => {
             background: colorBgContainer,
           }}
         >
-          Content
+          {content}
         </Content>
       </Layout>
     </Layout>
   );
 };
 
-export default SildeBar;
+export default SideBar;

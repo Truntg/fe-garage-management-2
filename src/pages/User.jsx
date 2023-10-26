@@ -1,9 +1,9 @@
-import SildeBar from '../components/SildeBar';
+import SideBar from '../components/SideBar/Sidebar';
 
 const User = () => {
   return (
     <div>
-      <SildeBar />
+      <SideBar />
     </div>
   );
 };
