@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import User from './pages/User';
-import OwnerList from './components/Owner/List';
+import OwnerList from './components/Owner/List/List';
 import SideBar from './components/SideBar/Sidebar';
 
 const router = createBrowserRouter([

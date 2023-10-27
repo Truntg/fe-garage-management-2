@@ -2,9 +2,12 @@ import { Button, Select, Table, Space } from 'antd';
 import Search from 'antd/lib/input/Search';
 
 import './List.css';
-import SideBar from '../SideBar/Sidebar';
+import SideBar from '../../SideBar/Sidebar';
+import fetchOwner from '../../../Store/reducers/owner';
 
 const OwnerList = () => {
+  const dfafd = fetchOwner();
+  console.log('fdadffda', dfafd);
   const { Option } = Select;
   const columns = [
     {
@@ -54,7 +57,7 @@ const OwnerList = () => {
     {
       key: '2',
       name: 'John Brown',
-      email: 'avc@gmail.com',
+      email: 'dfsfds@gmail.com',
       phone: '1234556',
     },
   ];
@@ -77,12 +80,8 @@ const OwnerList = () => {
           }}
           onChange={handleChange}
         >
-          <Option value="jack">Jack</Option>
-          <Option value="lucy">Lucy</Option>
-          <Option value="Yiminghe">Yiminghe</Option>
-          <Option value="disabled" disabled>
-            Disabled
-          </Option>
+          <Option value="John">Jack</Option>
+          <Option value="John">John</Option>
         </Select>
 
         <Search
