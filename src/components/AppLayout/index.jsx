@@ -8,9 +8,10 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
+import { Outlet } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
-const SildeBar = ({ content }) => {
+const AppLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -68,11 +69,11 @@ const SildeBar = ({ content }) => {
             background: colorBgContainer,
           }}
         >
-          {content}
+          <Outlet />
         </Content>
       </Layout>
     </Layout>
   );
 };
 
-export default SildeBar;
+export default AppLayout;

@@ -1,5 +1,4 @@
 import { Button, Select, Space, Table } from 'antd';
-import SildeBar from '../../Sidebar/SildeBar';
 import Search from 'antd/es/input/Search';
 import './ListGarage.css';
 
@@ -68,7 +67,7 @@ const ListGarage = () => {
     console.log(`selected ${value}`);
   };
   const onSearch = (value, _e, info) => console.log(info?.source, value);
-  const garageContent = (
+  const GarageContent = (
     <div>
       <div className="title-container">
         <h3>All Garage </h3>
@@ -119,7 +118,7 @@ const ListGarage = () => {
   );
   return (
     <>
-      <SildeBar content={garageContent} />
+      <GarageContent />
     </>
   );
 };

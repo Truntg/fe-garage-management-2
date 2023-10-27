@@ -2,7 +2,7 @@ import { Button, Select, Table, Space } from 'antd';
 import Search from 'antd/lib/input/Search';
 
 import './List.css';
-import SildeBar from '../Sidebar/SildeBar';
+import SildeBar from '../AppLayout';
 
 const OwnerList = () => {
   const { Option } = Select;

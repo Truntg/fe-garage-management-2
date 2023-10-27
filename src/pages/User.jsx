@@ -1,4 +1,4 @@
-import SildeBar from '../components/Sidebar/SildeBar';
+import SildeBar from '../components/AppLayout';
 
 const User = () => {
   return (

@@ -1,16 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import User from './pages/User';
-import OwnerList from './components/Owner/List';
-import SildeBar from './components/Sidebar/SildeBar';
+import AppLayout from './components/AppLayout';
 import ListGarage from './components/Garage/List/ListGarage';
+import OwnerList from './components/Owner/List';
+import User from './pages/User';
 
 const router = createBrowserRouter([
   {
     path: '/',
-  },
-  {
-    element: <SildeBar />,
+    element: <AppLayout />,
     children: [
       {
         path: '/user',
