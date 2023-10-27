@@ -7,8 +7,8 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
-import FormUser from '../pages/FormUser';
-const { Header, Sider } = Layout;
+
+const { Header, Sider, Content } = Layout;
 const SildeBar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -19,7 +19,7 @@ const SildeBar = () => {
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
-          theme="light"
+          theme="dark"
           mode="inline"
           defaultSelectedKeys={['1']}
           items={[
@@ -59,14 +59,14 @@ const SildeBar = () => {
             }}
           />
         </Header>
-        <FormUser
+        <Content
           style={{
             margin: '24px 16px',
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
           }}
-        ></FormUser>
+        ></Content>
       </Layout>
     </Layout>
   );
