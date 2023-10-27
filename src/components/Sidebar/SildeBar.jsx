@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import {
   MenuFoldOutlined,
@@ -9,7 +10,7 @@ import {
 import { Layout, Menu, Button, theme } from 'antd';
 
 const { Header, Sider, Content } = Layout;
-const SildeBar = () => {
+const SildeBar = ({ content }) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -66,7 +67,9 @@ const SildeBar = () => {
             minHeight: 280,
             background: colorBgContainer,
           }}
-        ></Content>
+        >
+          {content}
+        </Content>
       </Layout>
     </Layout>
   );

@@ -12,12 +12,12 @@
     margin-left: 10px; 
   }
 
-.owner-list-content {
+.list-content {
     display: flex; 
     align-items: center; 
   }
   
-  .select-content {
+  .select {
     margin-right: 3cqw; 
   }
   .search-content {

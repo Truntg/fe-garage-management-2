@@ -68,15 +68,15 @@ const ListGarage = () => {
     console.log(`selected ${value}`);
   };
   const onSearch = (value, _e, info) => console.log(info?.source, value);
-  const customContent = (
+  const garageContent = (
     <div>
       <div className="title-container">
-        <h3>All Garage Owners</h3>
+        <h3>All Garage </h3>
         <Button>Add Owner</Button>
       </div>
-      <div className="owner-list-content">
+      <div className="list-content">
         <Select
-          className="select-content"
+          className="select"
           defaultValue="Name"
           style={{
             width: 220,
@@ -119,7 +119,7 @@ const ListGarage = () => {
   );
   return (
     <>
-      <SildeBar content={customContent} />
+      <SildeBar content={garageContent} />
     </>
   );
 };
