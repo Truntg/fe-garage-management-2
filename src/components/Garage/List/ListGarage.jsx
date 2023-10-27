@@ -67,7 +67,8 @@ const ListGarage = () => {
     console.log(`selected ${value}`);
   };
   const onSearch = (value, _e, info) => console.log(info?.source, value);
-  const GarageContent = (
+
+  return (
     <div>
       <div className="title-container">
         <h3>All Garage </h3>
@@ -115,11 +116,6 @@ const ListGarage = () => {
         <Table columns={columns} dataSource={data} />
       </div>
     </div>
-  );
-  return (
-    <>
-      <GarageContent />
-    </>
   );
 };
 
