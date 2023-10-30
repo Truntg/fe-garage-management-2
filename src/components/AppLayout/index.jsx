@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import {
   MenuFoldOutlined,
@@ -7,8 +8,10 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
+import { Outlet } from 'react-router-dom';
+
 const { Header, Sider, Content } = Layout;
-const SildeBar = () => {
+const AppLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -18,7 +21,7 @@ const SildeBar = () => {
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
-          theme="light"
+          theme="dark"
           mode="inline"
           defaultSelectedKeys={['1']}
           items={[
@@ -66,11 +69,11 @@ const SildeBar = () => {
             background: colorBgContainer,
           }}
         >
-          Content
+          <Outlet />
         </Content>
       </Layout>
     </Layout>
   );
 };
 
-export default SildeBar;
+export default AppLayout;

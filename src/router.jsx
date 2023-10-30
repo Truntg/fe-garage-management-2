@@ -1,6 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
+
+import AppLayout from './components/AppLayout';
+import ListGarage from './components/Garage/List/ListGarage';
+import OwnerList from './components/Owner/List';
 import User from './pages/User';
-import SildeBar from './components/SildeBar';
 import Signin from './pages/Signin';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
@@ -8,11 +11,21 @@ import ResetPassword from './pages/ResetPassword';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <SildeBar />,
-  },
-  {
-    path: '/user',
-    element: <User />,
+    element: <AppLayout />,
+    children: [
+      {
+        path: '/user',
+        element: <User />,
+      },
+      {
+        path: '/owner',
+        element: <OwnerList />,
+      },
+      {
+        path: '/garage',
+        element: <ListGarage />,
+      },
+    ],
   },
   {
     path: '/signin',
