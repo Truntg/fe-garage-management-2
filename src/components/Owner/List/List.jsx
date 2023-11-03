@@ -1,25 +1,37 @@
-import { Button, Select, Table, Space } from 'antd';
+import { Button, Select, Space, Table } from 'antd';
 import Search from 'antd/lib/input/Search';
 
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOwners } from '../../../Store/reducers/owner';
 import './List.css';
-import SideBar from '../../SideBar/Sidebar';
-import fetchOwner from '../../../Store/reducers/owner';
+import { Link } from 'react-router-dom';
 
 const OwnerList = () => {
-  const dfafd = fetchOwner();
-  console.log('fdadffda', dfafd);
+  const [params, setParams] = useState({
+    page: 1,
+    limit: 2,
+  });
+
+  const dispatch = useDispatch();
+  const { manageOwner } = useSelector((state) => state.owner);
   const { Option } = Select;
+
+  useEffect(() => {
+    dispatch(fetchOwners(params));
+  }, [params]);
+
   const columns = [
     {
       title: '#',
-      dataIndex: 'key',
-      key: 'key',
+      key: 'id',
+      dataIndex: 'id',
     },
     {
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
+      dataIndex: 'fullName',
+      key: 'fullName',
+      render: (text) => <Link>{text}</Link>,
     },
     {
       title: 'Email',
@@ -28,8 +40,8 @@ const OwnerList = () => {
     },
     {
       title: 'Phone number',
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
     },
     {
       title: 'Status',
@@ -41,79 +53,87 @@ const OwnerList = () => {
       key: 'action',
       render: () => (
         <Space size="middle">
-          <a>Update</a>
-          <a>Delete</a>
+          <Link>Update</Link>
+          <Link>Delete</Link>
         </Space>
       ),
     },
   ];
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      email: 'avc@gmail.com',
-      phone: '1234556',
-    },
-    {
-      key: '2',
-      name: 'John Brown',
-      email: 'dfsfds@gmail.com',
-      phone: '1234556',
-    },
-  ];
+  const data = manageOwner?.items;
+  console.log(333, data);
+  const pagination = manageOwner?.pagination;
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    setParams({ ...params, status: value });
   };
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
-  const customContent = (
-    <div>
-      <div className="title-container">
-        <h3>All Garage Owners</h3>
-        <Button>Add Owner</Button>
-      </div>
-      <div className="owner-list-content">
-        <Select
-          className="select-content"
-          defaultValue="Name"
-          style={{
-            width: 220,
-          }}
-          onChange={handleChange}
-        >
-          <Option value="John">Jack</Option>
-          <Option value="John">John</Option>
-        </Select>
+  const onSearch = (value) => {
+    setParams({ ...params, name: value });
+  };
 
-        <Search
-          className="search-content"
-          placeholder="input search text"
-          onSearch={onSearch}
-          style={{
-            width: 200,
-          }}
-        />
+  const onTableChange = (pagination) => {
+    setParams({ ...params, page: pagination.current, limit: pagination.pageSize });
+  };
+  const [filter, setFilter] = useState('');
+  const onFilterTypeChange = (value) => {
+    setFilter(value);
+  };
 
-        <Select
-          className="select-content"
-          defaultValue="Status"
-          style={{
-            width: 220,
-          }}
-          onChange={handleChange}
-        >
-          <Option value="Active">Active</Option>
-          <Option value="Inactive">Inactive</Option>
-        </Select>
-      </div>
-      <div>
-        <Table columns={columns} dataSource={data} />
-      </div>
-    </div>
-  );
+  console.log(222, filter);
+
+  if (!manageOwner) return;
 
   return (
     <>
-      <SideBar content={customContent} />
+      <div>
+        <div className="title-container">
+          <h3>All Garage Owners</h3>
+          <Button>Add Owner</Button>
+        </div>
+        <div className="owner-list-content">
+          <Space className="search-content">
+            <Select
+              defaultValue="name"
+              options={[
+                {
+                  label: 'Name',
+                  value: 'name',
+                },
+                {
+                  label: 'Email',
+                  value: 'email',
+                },
+              ]}
+              onChange={onFilterTypeChange}
+            />
+            <Search placeholder="input search text" allowClear onSearch={onSearch} style={{ width: 200 }} />
+          </Space>
+
+          <Select
+            className="select-content"
+            defaultValue="Status"
+            style={{
+              width: 220,
+            }}
+            onChange={handleChange}
+            allowClear
+          >
+            <Option value="ACTIVE">Active</Option>
+            <Option value="INACTIVE">Inactive</Option>
+          </Select>
+        </div>
+        <div>
+          <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={data}
+            pagination={{
+              current: pagination.page,
+              pageSize: pagination.limit,
+              total: pagination.total,
+            }}
+            onChange={onTableChange}
+          />
+        </div>
+      </div>
     </>
   );
 };

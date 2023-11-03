@@ -1,6 +1,4 @@
-export const fetchOwners = createAsyncThunk(
-    'book/fetchBooks',
-    async (payload, thunkAPI) => {
-      const response = await fetch('https://jsonplaceholder.typicode.com/albums')
-    }
-  )
+export const fetchOwners = axiosInstance.get('/users');
+
+import axiosInstance from "../../../services/axios.sevrice"
+  

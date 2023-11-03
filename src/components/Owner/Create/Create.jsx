@@ -1,21 +1,23 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
-import { Button, Col, DatePicker, Form, Input, Row, Select, Space } from 'antd';
+import { Button, Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Space } from 'antd';
 import React, { useState } from 'react';
 
-const EditOwner = () => {
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkYTBhNDAzLWRiOWYtNDAyZC1hOGUzLTM1NjZhN2JiMmVjZiIsImVtYWlsIjoibmhvbTJAZ3JyLmxhIiwiZnVsbE5hbWUiOiJOaG9tIDIiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2OTg0NjYzMTQsImV4cCI6MTY5ODUwMjMxNH0.Ikv-2NRILHFKCbrGAiCBK-qpIZFg8QDP-aYX-j9FPp0';
-  localStorage.setItem('token', token);
-
-  const [formSubmitted, setFormSubmitted] = useState(false);
+const CreateOwner = ({ value }) => {
   const [form] = Form.useForm();
   const dateFormat = 'YYYY/MM/DD';
-  const { Option } = Select;
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const allGarages = ['Garage 1', 'Garage 2', 'Garage 3', 'Garage 4', 'Garage 5'];
+  const [filterValue, setFilterValue] = useState('');
+  const filteredGarages = allGarages.filter((garage) => garage.includes(filterValue));
+
+  const handleInputChange = (e) => {
+    setFilterValue(e.target.value);
+  };
+
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
-
   const SubmitButton = ({ form }) => {
     const values = Form.useWatch([], form);
     React.useEffect(() => {}, [values, formSubmitted]);
@@ -23,7 +25,7 @@ const EditOwner = () => {
     return (
       <Space>
         <Button type="primary" htmlType="button" onClick={handleSubmit}>
-          Edit
+          Save
         </Button>
       </Space>
     );
@@ -42,7 +44,22 @@ const EditOwner = () => {
   return (
     <>
       <div>
-        <Form form={form} name="validateOnly" layout="vertical" autoComplete="off">
+        <Form
+          form={form}
+          name="validateOnly"
+          layout="vertical"
+          autoComplete="off"
+          initialValues={{
+            name: '',
+            email: '',
+            password: '',
+            phone: '',
+            gender: 'Gender',
+            dob: '',
+            role: 'Role',
+            garage: '',
+          }}
+        >
           <Row gutter={[16, 34]}>
             <Col className="gutter-row" span={5}>
               <Form.Item name="name" label="Name" rules={[{ required: true }]}>
@@ -65,6 +82,15 @@ const EditOwner = () => {
           </Row>
           <Row gutter={[16, 34]}>
             <Col className="gutter-row" span={5}>
+              <Form.Item name="password" label="Password" rules={[{ required: true }]}>
+                <Input
+                  style={{
+                    width: '80%',
+                  }}
+                />
+              </Form.Item>
+            </Col>
+            <Col className="gutter-row" span={5}>
               <Form.Item name="phone" label="Phone Number" rules={[{ required: true }]}>
                 <Input
                   style={{
@@ -78,13 +104,11 @@ const EditOwner = () => {
                 <Select
                   className="select-content"
                   defaultValue="Gender"
-                  style={{
-                    width: '80%',
-                  }}
+                  style={{ width: '80%' }}
                   onChange={handleChange}
                 >
-                  <Option value="Male">Male</Option>
-                  <Option value="Female">Female</Option>
+                  <Select.Option value="Male">Male</Select.Option>
+                  <Select.Option value="Female">Female</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -115,27 +139,28 @@ const EditOwner = () => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col className="gutter-row" span={5}>
-              <Form.Item name="status" label="Status" rules={[{ required: true }]}>
-                <Select
-                  className="select-content"
-                  defaultValue="Status"
-                  style={{
-                    width: '80%',
-                  }}
-                  onChange={handleChange}
-                >
-                  <Option value="Active">Active</Option>
-                  <Option value="Inactive">Inactive</Option>
-                </Select>
-              </Form.Item>
+          </Row>
+          <Row gutter={[16, 24]}>
+            <Col className="gutter-row" span={8}>
+              <Card>
+                <Form.Item name="garage" label="Garage">
+                  <Input placeholder="Enter garage name" onChange={handleInputChange} value={filterValue} />
+                  <Checkbox.Group>
+                    {filteredGarages.map((garage) => (
+                      <div key={garage}>
+                        <Checkbox value={garage}>{garage}</Checkbox>
+                      </div>
+                    ))}
+                  </Checkbox.Group>
+                </Form.Item>
+              </Card>
             </Col>
           </Row>
         </Form>
         <SubmitButton form={form} />
+        <Button>Cancel</Button>
       </div>
     </>
   );
 };
-
-export default EditOwner;
+export default CreateOwner;
