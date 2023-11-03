@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row, Select, Space, theme } from 'antd';
-const { Option } = Select;
+import { Button, Col, Form, Input, Row, Space, theme } from 'antd';
+
 const AdvancedSearchForm = () => {
   const { token } = theme.useToken();
   const [form] = Form.useForm();
@@ -20,8 +20,8 @@ const AdvancedSearchForm = () => {
         <Col span={8} key={i}>
           {i % 3 !== 1 ? (
             <Form.Item
-              name={`field-${i}`}
-              label={`Field ${i}`}
+              name={`name`}
+              label={`Name`}
               rules={[
                 {
                   required: true,
@@ -29,24 +29,20 @@ const AdvancedSearchForm = () => {
                 },
               ]}
             >
-              <Input placeholder="placeholder" />
+              <Input placeholder="Enter garage name" />
             </Form.Item>
           ) : (
             <Form.Item
-              name={`field-${i}`}
-              label={`Field ${i}`}
+              name={`name`}
+              label={`Name`}
               rules={[
                 {
                   required: true,
-                  message: 'Select something!',
+                  message: 'Input something!',
                 },
               ]}
-              initialValue="1"
             >
-              <Select>
-                <Option value="1"></Option>
-                <Option value="2">222</Option>
-              </Select>
+              <Input placeholder="Enter garage name" />
             </Form.Item>
           )}
         </Col>,
