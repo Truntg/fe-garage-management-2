@@ -18,6 +18,17 @@ export const fetchOwners = createAsyncThunk('owner/fetchOwners', async (payload)
   }
 });
 
+export const fetchOwnersById = createAsyncThunk('owner/fetchOwnersById', async (payload) => {
+  try {
+    const response = await axiosInstance.get(`/users/${payload}`, {
+      params: payload
+    });
+    return response.data.data; 
+  } catch (error) {
+    throw error; 
+  }
+});
+
 
 const ownerSlice = createSlice({
   name: 'owner',

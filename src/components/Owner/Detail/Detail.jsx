@@ -1,10 +1,19 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable react/prop-types */
-import { Button, Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Space } from 'antd';
-import React, { useState } from 'react';
+import { Button, Card, Col, Form, Row, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchOwnersById } from '../../../Store/reducers/owner';
+import { useDispatch, useSelector } from 'react-redux';
 
 const DetailOwner = ({ value }) => {
+  const dispatch = useDispatch();
+  const { manageOwner } = useSelector((state) => state.owner);
+  const userId = '71c353d5-d18c-4bc8-91d6-b5f39399f9c3';
+  useEffect(() => {
+    dispatch(fetchOwnersById(userId));
+  }, []);
+  console.log(manageOwner);
   const [form] = Form.useForm();
   const dateFormat = 'YYYY/MM/DD';
 
@@ -44,6 +53,7 @@ const DetailOwner = ({ value }) => {
         console.error('Form validation error:', error);
       });
   };
+
   return (
     <>
       <div>

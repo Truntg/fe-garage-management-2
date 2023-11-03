@@ -43,13 +43,13 @@ const EditService = () => {
 
   const dispatch = useDispatch();
   const { manageService } = useSelector((state) => state.service);
-  const data = manageService?.items;
+  const data = manageService?.items.map((value) => {
+    return value;
+  });
   console.log(333, data);
-  const { Option } = Select;
   const [params, setParams] = useState({
     page: 1,
     limit: 2,
-    name: 'Service 1',
   });
   useEffect(() => {
     dispatch(fetchServices(params));
