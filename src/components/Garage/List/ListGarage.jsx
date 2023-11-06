@@ -72,7 +72,7 @@ const ListGarage = () => {
     <div>
       <div className="title-container">
         <h3>All Garage </h3>
-        <Button>Add Owner</Button>
+        <Button>Add Garage</Button>
       </div>
       <div className="list-content">
         <Select

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import {
   MenuFoldOutlined,
@@ -51,7 +50,7 @@ const AppLayout = () => {
             {
               key: '1',
               icon: <UserOutlined />,
-              label: 'nav 1',
+              label: 'Garage',
             },
             {
               key: '2',
