@@ -1,54 +1,97 @@
-import { Button, Form, Input, Row, Space } from 'antd';
+import { Alert, Button, Form, Input, Row, Space, notification } from 'antd';
 import { Col } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { createNewService } from '../../../Store/reducers/service';
 
 const CreateService = () => {
-  const style = {
-    background: '#0092ff',
-    padding: '8px 0',
-  };
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
+  const [formData, setFormData] = useState({
+    name: 'string',
+    description: 'string',
+    minPrice: 0,
+    maxPrice: 0,
+  });
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const SubmitButton = ({ form }) => {
-    const values = Form.useWatch([], form);
-    React.useEffect(() => {}, [values, formSubmitted]);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [isSubmited, setIsSubmited] = useState(false);
 
-    return (
-      <Space>
-        <Button type="primary" htmlType="button" onClick={handleSubmit}>
-          Create
-        </Button>
-      </Space>
-    );
-  };
+  useEffect(() => {
+    form
+      .validateFields()
+      .then(() => {
+        setIsFormValid(true);
+        setShowAlert(false);
+      })
+      .catch(() => {
+        setIsFormValid(false);
+        setShowAlert(true);
+      });
+  }, [form]);
+
   const handleSubmit = () => {
-    setFormSubmitted(true);
+    setIsSubmited(true);
     form
       .validateFields()
       .then((values) => {
-        console.log('Form values:', values);
+        const formattedValues = {
+          ...values,
+          minPrice: parseInt(values.minPrice, 10),
+          maxPrice: parseInt(values.maxPrice, 10),
+        };
+
+        dispatch(createNewService(formattedValues))
+          .unwrap()
+          .then((result) => {
+            setShowAlert(false);
+            setIsSubmited(false);
+            notification.success({
+              message: 'Successfull',
+              description: 'The service has been created successfully !',
+              placement: 'topLeft',
+            });
+
+            setTimeout(() => {
+              window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+            }, 3000);
+          })
+          .catch((error) => {
+            console.error('Lỗi khi tạo dịch vụ', error);
+            setShowAlert(true);
+          });
       })
       .catch((error) => {
-        console.error('Form validation error:', error);
+        setShowAlert(true);
+        console.error('Lỗi khi xác thực biểu mẫu', error);
       });
   };
+
   const handleFormReset = () => {
     form.resetFields();
-    setFormSubmitted(false);
+    setIsSubmited(false);
+    setShowAlert(false);
   };
-  const validateNumber = (rule, value, callback) => {
+  const validateNumber = async (rule, value) => {
     if (value === '') {
-      callback();
+      return;
     } else if (isNaN(value)) {
-      callback('Please enter a valid number');
-    } else {
-      callback();
+      throw new Error('Please enter a valid number');
     }
   };
 
   return (
     <>
+      {showAlert && isSubmited && (
+        <Alert
+          message="Error"
+          description="Please fill in the form correctly."
+          type="error"
+          showIcon
+          closable
+          onClose={() => setShowAlert(false)}
+        />
+      )}
       <div>
         <div>
           <Form form={form} name="validateOnly" layout="vertical" autoComplete="off">
@@ -60,7 +103,7 @@ const CreateService = () => {
               </Col>
               <Col className="gutter-row" span={6}>
                 <Form.Item
-                  name="min"
+                  name="minPrice"
                   label="Min price"
                   rules={[{ required: true, message: 'Please enter the maximum price' }, { validator: validateNumber }]}
                 >
@@ -69,11 +112,11 @@ const CreateService = () => {
               </Col>
               <Col className="gutter-row" span={6}>
                 <Form.Item
-                  name="max"
+                  name="maxPrice"
                   label="Max price"
                   rules={[{ required: true, message: 'Please enter the maximum price' }, { validator: validateNumber }]}
                 >
-                  <Input placeholder="Enter ma6x price" />
+                  <Input placeholder="Enter max price" />
                 </Form.Item>
               </Col>
             </Row>
@@ -84,10 +127,14 @@ const CreateService = () => {
             </div>
           </Form>
 
-          <SubmitButton form={form}>Reset</SubmitButton>
-          <Button type="default" onClick={handleFormReset}>
-            Reset
-          </Button>
+          <Space>
+            <Button type="primary" htmlType="button" onClick={handleSubmit}>
+              Create
+            </Button>
+            <Button type="default" onClick={handleFormReset}>
+              Reset
+            </Button>
+          </Space>
         </div>
       </div>
     </>

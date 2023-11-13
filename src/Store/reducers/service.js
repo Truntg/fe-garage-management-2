@@ -3,9 +3,16 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axiosInstance from "../../services/axios.sevrice"
 axiosInstance.defaults.headers.common['Authorization'] = localStorage.getItem('accessToken') ?? '';
 const initialState = {
- manageService: null
+ manageService: null,
+ serviceByIdData: null,
+ createServiceData: {
+  name: 'string',
+  description: 'string',
+  minPrice: 0,
+  maxPrice: 0,
 }
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkYTBhNDAzLWRiOWYtNDAyZC1hOGUzLTM1NjZhN2JiMmVjZiIsImVtYWlsIjoibmhvbTJAZ3JyLmxhIiwiZnVsbE5hbWUiOiJOaG9tIDIiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2OTg5OTUyMDksImV4cCI6MTY5OTAzMTIwOX0.Vc-2xcx3iVxAjDKu8TFhZwWs5d2enomRi4mS_SIGIF4'
+}
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkYTBhNDAzLWRiOWYtNDAyZC1hOGUzLTM1NjZhN2JiMmVjZiIsImVtYWlsIjoibmhvbTJAZ3JyLmxhIiwiZnVsbE5hbWUiOiJOaG9tIDIiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2OTk4MTE0OTcsImV4cCI6MTY5OTg0NzQ5N30.ab8ldG_K6Gsy2R_1pdyBrHKNyx9pFNbP0i2CJVD0-OA'
 localStorage.setItem('accessToken', token )
 export const fetchServices = createAsyncThunk('service/fetchServices', async (payload) => {
   try {
@@ -15,6 +22,22 @@ export const fetchServices = createAsyncThunk('service/fetchServices', async (pa
     return response.data.data; 
   } catch (error) {
     throw error; 
+  }
+});
+export const fetchServicesById = createAsyncThunk('owner/fetchServicesById', async (payload) => {
+  try {
+    const response = await axiosInstance.get(`/services/${payload}`)
+    return response.data.data; 
+  } catch (error) {
+    throw error; 
+  }
+});
+export const createNewService = createAsyncThunk('service/createNewService', async (serviceData) => {
+  try {
+    const response = await axiosInstance.post('services', serviceData);
+    return response.data.data;
+  } catch (error) {
+    throw error;
   }
 });
 
@@ -30,6 +53,10 @@ const ownerSlice = createSlice({
     builder.addCase(fetchServices.fulfilled, (state, action) => {
       state.manageService = action.payload;
     });
+    builder.addCase(fetchServicesById.fulfilled, (state, action) => {
+      state.serviceByIdData = action.payload;
+    });
+  
   },
 })
 const serviceReducer = ownerSlice.reducer

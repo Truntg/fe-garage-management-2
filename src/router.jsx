@@ -4,7 +4,6 @@ import AppLayout from './components/AppLayout/index.jsx';
 import ListGarage from './components/Garage/List/ListGarage';
 import OwnerList from './components/Owner/List/List.jsx';
 import User from './pages/User';
-
 import EditOwner from './components/Owner/Edit/Edit.jsx';
 import CreateService from './components/Service/Create/Create.jsx';
 import EditService from './components/Service/Edit/Edit.jsx';
@@ -29,7 +28,7 @@ const router = createBrowserRouter([
         element: <OwnerList />,
       },
       {
-        path: '/editowner',
+        path: '/editowner/:id',
         element: <EditOwner />,
       },
       {
@@ -37,7 +36,7 @@ const router = createBrowserRouter([
         element: <CreateOwner />,
       },
       {
-        path: '/detailowner',
+        path: '/owner/:id',
         element: <DetailOwner />,
       },
       {

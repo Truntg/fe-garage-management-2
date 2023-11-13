@@ -31,7 +31,7 @@ const OwnerList = () => {
       title: 'Name',
       dataIndex: 'fullName',
       key: 'fullName',
-      render: (text) => <Link>{text}</Link>,
+      render: (text) => text,
     },
     {
       title: 'Email',
@@ -51,12 +51,14 @@ const OwnerList = () => {
     {
       title: 'Action',
       key: 'action',
-      render: () => (
-        <Space size="middle">
-          <Link>Update</Link>
-          <Link>Delete</Link>
-        </Space>
-      ),
+      render: (row) => {
+        return (
+          <Space size="middle">
+            <Link to={`/owner/${row.id}`}>View</Link>
+            <Link>Delete</Link>
+          </Space>
+        );
+      },
     },
   ];
   const data = manageOwner?.items;
@@ -86,7 +88,9 @@ const OwnerList = () => {
       <div>
         <div className="title-container">
           <h3>All Garage Owners</h3>
-          <Button>Add Owner</Button>
+          <Link to={`/createowner`}>
+            <Button>Add Owner</Button>
+          </Link>
         </div>
         <div className="owner-list-content">
           <Space className="search-content">
