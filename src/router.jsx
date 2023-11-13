@@ -10,6 +10,9 @@ import EditService from './components/Service/Edit/Edit.jsx';
 import DetailService from './components/Service/Detail/Detail.jsx';
 import CreateOwner from './components/Owner/Create/Create.jsx';
 import DetailOwner from './components/Owner/Detail/Detail.jsx';
+import EditGarage from './components/Garage/Creater/EditGarage';
+import ChangePass from './components/Profile/ChangePass';
+import MyProfile from './components/Profile/MyProfile';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +28,7 @@ const router = createBrowserRouter([
         element: <OwnerList />,
       },
       {
-        path: '/editowner',
+        path: '/editowner/:id',
         element: <EditOwner />,
       },
       {
@@ -33,7 +36,7 @@ const router = createBrowserRouter([
         element: <CreateOwner />,
       },
       {
-        path: '/detailowner',
+        path: '/owner/:id',
         element: <DetailOwner />,
       },
       {
@@ -51,6 +54,18 @@ const router = createBrowserRouter([
       {
         path: '/garage',
         element: <ListGarage />,
+      },
+      {
+        path: '/edit',
+        element: <EditGarage />,
+      },
+      {
+        path: '/change',
+        element: <ChangePass />,
+      },
+      {
+        path: '/mypo',
+        element: <MyProfile />,
       },
     ],
   },

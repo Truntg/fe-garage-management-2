@@ -1,133 +1,78 @@
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable react/prop-types */
-import { Button, Card, Col, Form, Row, Space } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Button, Card, Col, Row, Space } from 'antd';
+import { useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { fetchOwnersById } from '../../../Store/reducers/owner';
 import { useDispatch, useSelector } from 'react-redux';
+import './Detail.css';
 
-const DetailOwner = ({ value }) => {
+const DetailOwner = () => {
   const dispatch = useDispatch();
-  const { manageOwner } = useSelector((state) => state.owner);
-  const userId = '71c353d5-d18c-4bc8-91d6-b5f39399f9c3';
+  const { userByIdData } = useSelector((state) => state.owner);
+  const navigate = useNavigate();
+
+  const params = useParams();
   useEffect(() => {
-    dispatch(fetchOwnersById(userId));
-  }, []);
-  console.log(manageOwner);
-  const [form] = Form.useForm();
-  const dateFormat = 'YYYY/MM/DD';
+    dispatch(fetchOwnersById(params.id));
+  }, [dispatch, params.id]);
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
-  const allGarages = ['Garage 1', 'Garage 2', 'Garage 3', 'Garage 4', 'Garage 5'];
-  const [filterValue, setFilterValue] = useState('');
-  const filteredGarages = allGarages.filter((garage) => garage.includes(filterValue));
-
-  const handleInputChange = (e) => {
-    setFilterValue(e.target.value);
+  const handleEdit = () => {
+    navigate(`/editowner/${params.id}`);
   };
-
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
-  const SubmitButton = ({ form }) => {
-    const values = Form.useWatch([], form);
-    React.useEffect(() => {}, [values, formSubmitted]);
-
-    return (
-      <Space>
-        <Button type="primary" htmlType="button" onClick={handleSubmit}>
-          Save
-        </Button>
-      </Space>
-    );
-  };
-  const handleSubmit = () => {
-    setFormSubmitted(true);
-    form
-      .validateFields()
-      .then((values) => {
-        console.log('Form values:', values);
-      })
-      .catch((error) => {
-        console.error('Form validation error:', error);
-      });
-  };
-
   return (
-    <>
-      <div>
-        <Form
-          form={form}
-          name="validateOnly"
-          layout="vertical"
-          autoComplete="off"
-          initialValues={{
-            name: '',
-            email: '',
-            password: '',
-            phone: '',
-            gender: 'Gender',
-            dob: '',
-            role: 'Role',
-            garage: '',
-          }}
-        >
-          <Row gutter={[16, 34]}>
-            <Col className="gutter-row" span={5}>
-              <Form.Item name="name" label="Name">
-                <div>Example</div>
-              </Form.Item>
-            </Col>
-            <Col className="gutter-row" span={5}>
-              <Form.Item name="email" label="Email">
-                <div>Example</div>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[16, 34]}>
-            <Col className="gutter-row" span={5}>
-              <Form.Item name="password" label="Password">
-                <div>Example</div>
-              </Form.Item>
-            </Col>
-            <Col className="gutter-row" span={5}>
-              <Form.Item name="phone" label="Phone Number">
-                <div>Example</div>
-              </Form.Item>
-            </Col>
-            <Col className="gutter-row" span={5}>
-              <div>Example</div>
-            </Col>
-          </Row>
-          <Row gutter={[16, 24]}>
-            <Col className="gutter-row" span={5}>
-              <div>Example</div>
-            </Col>
-            <Col className="gutter-row" span={5}>
-              <Form.Item name="role" label="Role">
-                <div>Example</div>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[16, 24]}>
-            <Col className="gutter-row" span={8}>
-              <Card>
-                <Form.Item name="garage" label="Garage">
-                  {filteredGarages.map((garage) => (
-                    <div key={garage} value={garage}>
-                      <Link>{garage}</Link>
-                    </div>
-                  ))}
-                </Form.Item>
-              </Card>
-            </Col>
-          </Row>
-        </Form>
-        <SubmitButton form={form} />
-        <Button>Cancel</Button>
-      </div>
-    </>
+    <div className="detail-container">
+      <Row gutter={[16, 24]}>
+        <Col span={24}>
+          <Card title="Infomation" bordered={false}>
+            <Row gutter={[16, 24]}>
+              <Col span={12}>
+                <div className="detail-label">Name:</div>
+                <div className="detail-value">{userByIdData?.fullName}</div>
+              </Col>
+              <Col span={12}>
+                <div className="detail-label">Email:</div>
+                <div className="detail-value">{userByIdData?.email}</div>
+              </Col>
+            </Row>
+            <Row gutter={[16, 24]}>
+              <Col span={12}>
+                <div className="detail-label">Date of Birth:</div>
+                <div className="detail-value">{userByIdData?.dob}</div>
+              </Col>
+              <Col span={12}>
+                <div className="detail-label">Phone Number:</div>
+                <div className="detail-value">{userByIdData?.phoneNumber}</div>
+              </Col>
+            </Row>
+            <Row gutter={[16, 24]}>
+              <Col span={12}>
+                <div className="detail-label">Gender:</div>
+                <div className="detail-value">{userByIdData?.gender}</div>
+              </Col>
+              <Col span={12}>
+                <div className="detail-label">Role:</div>
+                <div className="detail-value">{userByIdData?.role}</div>
+              </Col>
+            </Row>
+            <Row gutter={[16, 24]}>
+              <Col span={24}>
+                <div className="detail-label">Garage:</div>
+                <Link to={userByIdData?.garage}>{userByIdData?.garage}</Link>
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+      </Row>
+      <Space style={{ marginTop: 20 }}>
+        <Button type="primary" onClick={handleEdit}>
+          Edit
+        </Button>
+
+        <Button type="danger">Delete</Button>
+      </Space>
+    </div>
   );
 };
+
 export default DetailOwner;

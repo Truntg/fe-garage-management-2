@@ -1,5 +1,7 @@
 import { Button, Card, Checkbox, Col, DatePicker, Form, Input, Row, Select, Space } from 'antd';
 import React, { useState } from 'react';
+import { createNewService } from '../../../Store/reducers/service';
+import { useDispatch } from 'react-redux';
 
 const CreateOwner = ({ value }) => {
   const [form] = Form.useForm();
@@ -36,6 +38,8 @@ const CreateOwner = ({ value }) => {
       .validateFields()
       .then((values) => {
         console.log('Form values:', values);
+
+        useDispatch(createNewService(values));
       })
       .catch((error) => {
         console.error('Form validation error:', error);
@@ -50,10 +54,10 @@ const CreateOwner = ({ value }) => {
           layout="vertical"
           autoComplete="off"
           initialValues={{
-            name: '',
+            fullName: '',
             email: '',
             password: '',
-            phone: '',
+            phoneNumber: '',
             gender: 'Gender',
             dob: '',
             role: 'Role',
@@ -62,7 +66,7 @@ const CreateOwner = ({ value }) => {
         >
           <Row gutter={[16, 34]}>
             <Col className="gutter-row" span={5}>
-              <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+              <Form.Item name="fullName" label="Name" rules={[{ required: true }]}>
                 <Input
                   style={{
                     width: '80%',
@@ -91,7 +95,7 @@ const CreateOwner = ({ value }) => {
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={5}>
-              <Form.Item name="phone" label="Phone Number" rules={[{ required: true }]}>
+              <Form.Item name="phoneNumber" label="Phone Number" rules={[{ required: true }]}>
                 <Input
                   style={{
                     width: '80%',
