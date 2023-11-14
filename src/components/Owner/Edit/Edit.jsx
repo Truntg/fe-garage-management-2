@@ -1,25 +1,44 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
-import { Button, Col, DatePicker, Form, Input, Row, Select, Space } from 'antd';
-import React, { useState } from 'react';
+import { Button, Col, DatePicker, Form, Input, Row, Select, Space, notification } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOwnersById, updateOwner } from '../../../Store/reducers/owner';
+import moment from 'moment';
 
 const EditOwner = () => {
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkYTBhNDAzLWRiOWYtNDAyZC1hOGUzLTM1NjZhN2JiMmVjZiIsImVtYWlsIjoibmhvbTJAZ3JyLmxhIiwiZnVsbE5hbWUiOiJOaG9tIDIiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2OTg0NjYzMTQsImV4cCI6MTY5ODUwMjMxNH0.Ikv-2NRILHFKCbrGAiCBK-qpIZFg8QDP-aYX-j9FPp0';
-  localStorage.setItem('token', token);
-
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [form] = Form.useForm();
   const dateFormat = 'YYYY/MM/DD';
   const { Option } = Select;
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
+
+  const params = useParams();
+  const dispatch = useDispatch();
+  const { userByIdData } = useSelector((state) => state.owner);
+
+  useEffect(() => {
+    dispatch(fetchOwnersById(params.id));
+  }, [dispatch, params.id]);
+
+  useEffect(() => {
+    if (userByIdData) {
+      form.setFieldsValue({
+        fullName: userByIdData.fullName,
+        email: userByIdData.email,
+        phoneNumber: userByIdData.phoneNumber,
+        gender: userByIdData.gender,
+        dob: moment(userByIdData.dob),
+        role: userByIdData.role,
+        status: userByIdData.status,
+      });
+    }
+  }, [userByIdData, form]);
 
   const SubmitButton = ({ form }) => {
     const values = Form.useWatch([], form);
     React.useEffect(() => {}, [values, formSubmitted]);
-
+    console.log(userByIdData);
     return (
       <Space>
         <Button type="primary" htmlType="button" onClick={handleSubmit}>
@@ -28,24 +47,46 @@ const EditOwner = () => {
       </Space>
     );
   };
+
   const handleSubmit = () => {
     setFormSubmitted(true);
     form
       .validateFields()
       .then((values) => {
-        console.log('Form values:', values);
+        const formattedValues = {
+          ...values,
+          dob: values.dob.format('YYYY-MM-DD'),
+        };
+
+        console.log('Formatted Form values for PUT request:', formattedValues);
+
+        dispatch(updateOwner({ id: params.id, data: formattedValues }))
+          .unwrap()
+          .then((result) => {
+            notification.success({
+              message: 'Success',
+              description: 'Owner updated successfully!',
+            });
+            setTimeout(() => {
+              window.location.href = '/owner';
+            }, 3000);
+          })
+          .catch((error) => {
+            console.error('Error while updating owner:', error);
+          });
       })
       .catch((error) => {
         console.error('Form validation error:', error);
       });
   };
+
   return (
     <>
       <div>
         <Form form={form} name="validateOnly" layout="vertical" autoComplete="off">
           <Row gutter={[16, 34]}>
             <Col className="gutter-row" span={5}>
-              <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+              <Form.Item name="fullName" label="Name" rules={[{ required: true }]}>
                 <Input
                   style={{
                     width: '80%',
@@ -65,7 +106,7 @@ const EditOwner = () => {
           </Row>
           <Row gutter={[16, 34]}>
             <Col className="gutter-row" span={5}>
-              <Form.Item name="phone" label="Phone Number" rules={[{ required: true }]}>
+              <Form.Item name="phoneNumber" label="Phone Number" rules={[{ required: true }]}>
                 <Input
                   style={{
                     width: '80%',
@@ -81,7 +122,6 @@ const EditOwner = () => {
                   style={{
                     width: '80%',
                   }}
-                  onChange={handleChange}
                 >
                   <Option value="Male">Male</Option>
                   <Option value="Female">Female</Option>
@@ -108,7 +148,6 @@ const EditOwner = () => {
                   style={{
                     width: '80%',
                   }}
-                  onChange={handleChange}
                 >
                   <Option value="User">User</Option>
                   <Option value="Admin">Admin</Option>
@@ -123,7 +162,6 @@ const EditOwner = () => {
                   style={{
                     width: '80%',
                   }}
-                  onChange={handleChange}
                 >
                   <Option value="Active">Active</Option>
                   <Option value="Inactive">Inactive</Option>

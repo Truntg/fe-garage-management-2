@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         element: <OwnerList />,
       },
       {
-        path: '/editowner',
+        path: '/editowner/:id',
         element: <EditOwner />,
       },
       {
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
         element: <CreateOwner />,
       },
       {
-        path: '/detailowner',
+        path: '/owner/:id',
         element: <DetailOwner />,
       },
       {
