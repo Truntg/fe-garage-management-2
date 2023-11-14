@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Search from 'antd/es/input/Search';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getManagement, removeManagement } from '../store/reducers/management';
+import { fetchServices } from '../../../Store/reducers/service';
 
 const Service = () => {
   //--------------------------------------
@@ -94,7 +94,7 @@ const Service = () => {
   const { management } = useSelector((state) => state.management);
 
   useEffect(() => {
-    dispatch(getManagement(params));
+    dispatch(fetchServices(params));
   }, [params]);
 
   console.log(management, 'management');
@@ -110,7 +110,7 @@ const Service = () => {
 
   // xoa
   const deleteManagement = (values) => {
-    dispatch(removeManagement(values));
+    // dispatch(removeManagement(values));
   };
 
   const data = management?.items;
