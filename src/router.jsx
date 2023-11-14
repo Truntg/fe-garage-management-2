@@ -17,6 +17,7 @@ import DetailOwner from './components/Owner/Detail/Detail.jsx';
 import EditGarage from './components/Garage/Creater/EditGarage';
 import ChangePass from './components/Profile/ChangePass';
 import MyProfile from './components/Profile/MyProfile';
+import ServiceList from './components/Service/List/List.jsx';
 
 const router = createBrowserRouter([
   {
@@ -56,9 +57,14 @@ const router = createBrowserRouter([
         element: <DetailService />,
       },
       {
+        path: '/services',
+        element: <ServiceList />,
+      },
+      {
         path: '/garage',
         element: <ListGarage />,
       },
+
       {
         path: '/edit',
         element: <EditGarage />,
