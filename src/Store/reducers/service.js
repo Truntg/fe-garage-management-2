@@ -12,7 +12,7 @@ const initialState = {
   maxPrice: 0,
 }
 }
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkYTBhNDAzLWRiOWYtNDAyZC1hOGUzLTM1NjZhN2JiMmVjZiIsImVtYWlsIjoibmhvbTJAZ3JyLmxhIiwiZnVsbE5hbWUiOiJOaG9tIDIiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2OTk4MTE0OTcsImV4cCI6MTY5OTg0NzQ5N30.ab8ldG_K6Gsy2R_1pdyBrHKNyx9pFNbP0i2CJVD0-OA'
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxYzM1M2Q1LWQxOGMtNGJjOC05MWQ2LWI1ZjM5Mzk5ZjljMyIsImVtYWlsIjoibmhvbTJAZ3JyLmxhIiwiZnVsbE5hbWUiOiJOaMOzbSAyIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzAwNDc0MzYwLCJleHAiOjE3MDA1MTAzNjB9.hmv7eMXOD5ZVcaeT_Bu4N-Xa4Mp8vSnr3dqNdHrKYiA"
 localStorage.setItem('accessToken', token )
 export const fetchServices = createAsyncThunk('service/fetchServices', async (payload) => {
   try {

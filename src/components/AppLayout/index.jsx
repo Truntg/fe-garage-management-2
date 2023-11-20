@@ -23,15 +23,14 @@ const AppLayout = () => {
 
     navigate('/signin');
   };
+  const toProfile = () => {
+    navigate('/mypo');
+  };
 
   const items = [
     {
       key: '1',
-      label: (
-        <a target="_blank" rel="noopener noreferrer">
-          Profile
-        </a>
-      ),
+      label: <div onClick={toProfile}>Profile</div>,
     },
     {
       key: '2',
@@ -82,17 +81,23 @@ const AppLayout = () => {
               height: 64,
             }}
           />
-          <Dropdown
-            menu={{
-              items,
+          <div
+            style={{
+              float: 'right',
             }}
           >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <Avatar shape="square" size="medium" icon={<UserOutlined />} />
-              </Space>
-            </a>
-          </Dropdown>
+            <Dropdown
+              menu={{
+                items,
+              }}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <Avatar shape="square" size="medium" icon={<UserOutlined />} />
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
         </Header>
         <Content
           style={{

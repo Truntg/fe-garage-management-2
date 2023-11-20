@@ -1,14 +1,15 @@
 import { Button, Col, Row, Select, Space, Table } from 'antd';
-import { Option } from 'antd/es/mentions';
-import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
-import Search from 'antd/es/input/Search';
+
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchServices } from '../../../Store/reducers/service';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Option } from 'rc-select';
+import Search from 'antd/es/input/Search';
+import axiosInstance from '../../../services/axios.sevrice';
+import { fetchServicesById } from '../../../Store/reducers/service';
 
 const Service = () => {
-  //--------------------------------------
   const columns = [
     {
       title: '#',
@@ -28,12 +29,13 @@ const Service = () => {
     {
       title: 'Min price',
       dataIndex: 'minPrice',
-      key: 'min price',
+      key: 'minPrice',
     },
     {
       title: 'Max price',
       dataIndex: 'maxPrice',
-      key: 'max price',
+      key: 'maxPrice',
+
       render: (value) => (
         <div
           style={{
@@ -50,74 +52,53 @@ const Service = () => {
       key: 'action',
       render: () => (
         <div>
-          <EyeOutlined onClick={() => toManagementDetail()} />
-          <EditOutlined
-            style={{
-              paddingLeft: 12,
-              paddingRight: 12,
-            }}
-            onClick={() => toEditManagement()}
-          />
-          <DeleteOutlined onClick={() => deleteManagement} />
+          <Link to="/detailservice">
+            <EyeOutlined />
+          </Link>
+          <Link to="/editservice">
+            <EditOutlined
+              style={{
+                paddingLeft: 12,
+                paddingRight: 12,
+              }}
+            />
+          </Link>
+          <DeleteOutlined />
         </div>
       ),
     },
   ];
 
-  //------------------------------------
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [type, setType] = useState('name');
-  const [value, setValue] = useState('');
+  // const navigate = useNavigate();
 
-  //  chuyển trang
-  const toAddGarage = () => {
-    navigate('/managementcreate');
-  };
-  const toManagementDetail = () => {
-    navigate('/managementdetail');
-  };
-  const toEditManagement = () => {
-    navigate('/managementedit');
-  };
-
-  //---------------------------
-  const [params, setParams] = useState({
+  const [query, setQuery] = useState({
     page: 1,
-    limit: 1,
+    limit: 5,
     name: '',
     email: '',
     status: '',
   });
 
-  // call API
-  const { management } = useSelector((state) => state.management);
+  const navigate = useNavigate();
+  const [owners, setService] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [type, setType] = useState('Name');
+  const [value, setValue] = useState('');
 
-  useEffect(() => {
-    dispatch(fetchServices(params));
-  }, [params]);
+  const dispatch = useDispatch();
+  const fetchService = async () => {
+    const response = await axiosInstance.get('/services', {
+      params: query,
+    });
 
-  console.log(management, 'management');
-
-  // tìm kiếm
-  const onSearch = () => {
-    if (type === 'name') {
-      setParams({ ...params, name: value });
-    } else {
-      setParams({ ...params, email: value });
-    }
+    dispatch(fetchServicesById(response));
+    console.log(response);
+    setService(response.data.data.items);
+    setPagination(response.data.data.pagination);
   };
 
-  // xoa
-  const deleteManagement = (values) => {
-    // dispatch(removeManagement(values));
-  };
-
-  const data = management?.items;
-  const pagination = management?.pagination;
-
-  const onTableChange = (pagination) => {
-    setParams({ ...params, page: pagination.current, limit: pagination.pageSize });
+  const onTableChange = (values) => {
+    setQuery({ ...query, page: values.current });
   };
 
   const handleTypeChange = (value) => {
@@ -126,10 +107,58 @@ const Service = () => {
 
   const onInputChange = (event) => {
     const value = event.target.value;
+
     setValue(value);
   };
 
-  if (!management) return;
+  const onSearch = () => {
+    if (type === 'Name') {
+      setQuery({ ...query, name: value });
+    } else {
+      setQuery({ ...query, email: value });
+    }
+  };
+
+  const toCreateService = () => {
+    navigate('/createservice');
+  };
+
+  useEffect(() => {
+    // call API
+    fetchService();
+  }, [query]);
+
+  //-------------------------
+  // let idNew = null;
+  // const data = owners;
+  // if (data && data.length > 0) {
+  //   idNew = data[0].id;
+  // }
+  // //xoa
+  // const token = localStorage.getItem('accessToken') ?? '';
+
+  // const apiURL = `services/${idNew}`;
+
+  // const deleteService = () => {
+  //   axiosInstance
+  //     .delete(apiURL, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((result) => {
+  //       console.log(result);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       notification.open({
+  //         message: error.response.data.message,
+  //       });
+  //     });
+
+  //   onTableChange();
+  // };
 
   return (
     <div
@@ -138,21 +167,19 @@ const Service = () => {
         marginTop: 30,
       }}
     >
-      <div
-        style={{
-          marginBottom: 30,
-        }}
-      >
+      <div>
         <Row gutter={24}>
-          <Col className="gutter-row" span={3}>
-            <h2>All Garages Services</h2>
+          <Col className="gutter-row" span={6}>
+            <h2>All Garage Services</h2>
           </Col>
-          <Col className="gutter-row" span={18}></Col>
+          <Col className="gutter-row" span={15}></Col>
           <Col className="gutter-row" span={3}>
-            <Button onClick={toAddGarage}>Add service </Button>
+            <Button onClick={toCreateService}>Add Service</Button>
           </Col>
         </Row>
       </div>
+
+      {/* --------------------------- */}
       <div
         style={{
           marginBottom: 20,
@@ -185,21 +212,17 @@ const Service = () => {
         </Row>
       </div>
 
-      {/* ------------------------------------------- */}
-      <div>
-        <Table
-          rowKey="id"
-          columns={columns}
-          dataSource={data}
-          pagination={{
-            current: pagination.page,
-            pageSize: pagination.limit,
-            total: pagination.total,
-          }}
-          onChange={onTableChange}
-        />
-      </div>
-      {/* --------------------------------------------*/}
+      <Table
+        rowKey="id"
+        dataSource={owners}
+        columns={columns}
+        pagination={{
+          current: pagination.page,
+          pageSize: pagination.limit,
+          total: pagination.total,
+        }}
+        onChange={onTableChange}
+      />
     </div>
   );
 };
